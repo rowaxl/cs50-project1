@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session
+from flask import Flask, session, render_template
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -24,9 +24,10 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={
-        "key": os.getenv("APIKEY"),
-        "isbns": "9781632168146"
-    })
-    print(res.json())
+    # TODO: check session
     return "Project 1: TODO"
+
+@app.route("/signup")
+def sign_up():
+    # TODO: clear session
+    return render_template("signup.html")

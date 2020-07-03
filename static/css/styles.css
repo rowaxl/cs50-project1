@@ -1,0 +1,16 @@
+.bg {
+  color: #fff;
+  background: -webkit-linear-gradient(110deg, #7991fa 40%, rgba(0, 0, 0, 0) 30%), -webkit-radial-gradient(farthest-corner at 0% 0%, #374fbd 70%, #909fdf 70%);
+  background: -o-linear-gradient(110deg, #7991fa 40%, rgba(0, 0, 0, 0) 30%), -o-radial-gradient(farthest-corner at 0% 0%, #374fbd 70%, #909fdf 70%);
+  background: -moz-linear-gradient(110deg, #7991fa 40%, rgba(0, 0, 0, 0) 30%), -moz-radial-gradient(farthest-corner at 0% 0%, #374fbd 70%, #909fdf 70%);
+  background: linear-gradient(110deg, #7991fa 40%, rgba(0, 0, 0, 0) 30%), radial-gradient(farthest-corner at 0% 0%, #374fbd 70%, #909fdf 70%);
+  height: 100vh;
+  align-items: center;
+  display: flex;
+}
+
+#signup-card {
+  width: 30vw;
+  margin: auto;
+  color: #000;
+}
