@@ -9,11 +9,48 @@ The Bookcritics
   <h1>The BookCritics</h1>
 </div>
 
-<div id="search-card" class="card">
-  <h4>Welcome, {{ username }}! </h4>
-  do search by isbn
-  <a href="{{ url_for("signout") }}">
-    <button type="button" class="btn btn-secondary mb-2">Signout</button>
-  </a>
+<div id="search-card" class="card shadow p-3 mb-5 bg-white rounded">
+  <div class="row">
+    <div class="col-lg-11">
+      <h4>Welcome, {{ username }}! </h4>
+    </div>
+    <div class="col-lg-1">
+      <a href="{{   url_for("signout") }}">
+        <button type="button" class="btn btn-secondary mb-2">Signout</button>
+      </a>
+    </div>
+  </div>
+
+  <form action="{{ url_for("search", category=request.form.get("category"), query=request.form.get("query")) }}" method="GET">
+    <div class="form-row align-items-center" style="align-items: center;">
+      <div class="col-auto">
+        <label for="search-isbn">Search The Book by</label>
+      </div>
+      <div class="col-1">
+        <select class="custom-select mr-sm-2" id="search-by" name="category" style="margin-top: 20px; margin-bottom: 20px;">
+          {% for option in search_options %}
+          <option value="{{option.value}}">{{option.label}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="form-group form-row align-items-center">
+      <div class="col">
+        <div class="input-group mb-3">
+          <input type="search" class="form-control" id="search-isbn" name="query" aria-describedby="isbn-help" placeholder="Search!" autocomplete="off">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-primary mb-2">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {% if found %}
+    <h4>{{ count }} books found!</h4>
+    {% for book in books %}
+    <p>{{ book.title }}</p>
+    {% endfor %}
+  {% endif %}
 </div>
 {% endblock body %}
