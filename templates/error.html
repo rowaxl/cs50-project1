@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Internal Error
+{% endblock title %}
+
+{% block body %}
+<div id="server-message">
+  <h3>{{ error_message }}</h3>
+  <a href="{{ url_for("index") }}">
+    <button type="button" class="btn btn-primary mb-2">Return</button>
+  </a>
+</div>
+{% endblock body %}

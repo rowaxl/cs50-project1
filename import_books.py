@@ -9,7 +9,7 @@ if not os.getenv("DATABASE_URL"):
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -36,14 +36,22 @@ def main():
   with open('books.csv', 'r') as f:
     reader = csv.reader(f)
     next(reader)
+    rowcount = 0
     for isbn, title, author, year in reader:
-        book = Book(isbn=isbn, title=title, author=author, year=year)
-        db.session.add(book)
-    db.session.commit()
+      rowcount += 1
+      book = Book(isbn=isbn, title=title, author=author, year=year)
+      db.session.add(book)
+      print(f"{book.title}({book.isbn}) added")
+    try:
+      db.session.commit()
+      print(f"insert {rowcount} rows done")
+    except:
+      db.session.rollback()
+      raise
 
 if __name__ == "__main__":
   with app.app_context():
-    # initialize 
+    # initialize schema
     # db.create_all()
     # db.session.commit()
     main()

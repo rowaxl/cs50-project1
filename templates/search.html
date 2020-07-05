@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+The Bookcritics
+{% endblock title %}
+
+{% block body %}
+<div id="app-title-search">
+  <h1>The BookCritics</h1>
+</div>
+
+<div id="search-card" class="card">
+  <h4>Welcome, {{ username }}! </h4>
+  do search by isbn
+  <a href="{{ url_for("signout") }}">
+    <button type="button" class="btn btn-secondary mb-2">Signout</button>
+  </a>
+</div>
+{% endblock body %}
