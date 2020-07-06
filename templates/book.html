@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+The Bookcritics
+{% endblock title %}
+
+{% block body %}
+<div id="app-title-search">
+  <h1>The BookCritics</h1>
+</div>
+
+<div id="book-detail-card" class="card shadow rounded">
+  <div class="card-header">
+    <h5 class="card-title">{{ book_detail.title }}</h5>
+    <p class="card-text">ISBN: {{ book_detail.isbn }}</p>
+    <p class="card-text">Author: {{ book_detail.author }}</p>
+    <p class="card-text">Publish year: {{ book_detail.year }}</p>
+  </div>
+
+  <div class="card-body">
+    <a href="{{ url_for("search") }}">
+      <button type="button" class="btn btn-secondary mb-2">Return</button>
+    </a>
+    Spaces for reviews
+  </div>
+
+  <div class="card-footer text-muted">
+    Write new review
+  </div>
+</div>
+{% endblock body %}

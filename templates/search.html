@@ -52,11 +52,13 @@ The Bookcritics
     {% if count > 0 %}
       <ul class="list-group">
       {% for book in books %}
-        <li class="list-group-item list-group-item-action">
-          <h5 class="card-title">{{ book.title }} ({{ book.year }})</h5>
-          <p class="card-text">Author: {{ book.author }}</p>
-          <p class="card-text">ISBN: {{ book.isbn }}</p>
-        </li>
+          <a href={{ url_for("book_detail", isbn=book.isbn) }}>
+            <li class="list-group-item list-group-item-action">
+              <h5 class="card-title">{{ book.title }} ({{ book.year }})</h5>
+              <p class="card-text">Author: {{ book.author }}</p>
+              <p class="card-text">ISBN: {{ book.isbn }}</p>
+            </li>
+          </a>
       {% endfor %}
       </ul>
 

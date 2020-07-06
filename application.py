@@ -154,4 +154,20 @@ def search():
             print_exc(sys.exc_info()[0])
             return render_template("error.html", error_message="Failed to search")
     else:
-        return render_template("error.html", error_message="You have to sign in first")
+        return render_template("error.html", error_message="You need to  sign in first")
+
+@app.route("/book/<string:isbn>")
+def book_detail(isbn):
+    if 'username' in session and session['username'] is not "":
+        try:
+            db = db_session()
+            book_detail = db.query(Book).filter_by(isbn=isbn).first()
+
+            # TODO: Get book reviews
+
+            return render_template("book.html", book_detail=book_detail)
+        except:
+            print_exc(sys.exc_info()[0])
+            return render_template("error.html", error_message="Failed to show book details")
+    else:
+        return render_template("error.html", error_message="You need to  sign in first")
