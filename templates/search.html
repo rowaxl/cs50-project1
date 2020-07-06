@@ -61,15 +61,7 @@ The Bookcritics
       </ul>
 
       <nav aria-label="navigation" style="margin-top: 10px;">
-        <ul class="pagination justify-content-center">
-          {% if current_p > 1 %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for("search", category=category, query=query, page=current_p - 1) }}" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          {% endif %}
-
+        <ul id="paginationtwbs" class="pagination justify-content-center">
           {% for i in range(1, total_p + 1) %}
             {% if i == current_p %}
               <li class="page-item active">
@@ -81,16 +73,21 @@ The Bookcritics
               </li>
             {% endif %}
           {% endfor %}
-
-          {% if current_p < total_p %}
-          <li class="page-item">
-            <a class="page-link" href="{{ url_for("search", category=category, query=query, page=current_p + 1) }}" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-          {% endif %}
         </ul>
       </nav>
+      <script src={{ url_for('static', filename="js/jquery.twbsPagination.min.js")}}></script>
+      <script type="application/javascript">
+        $('#paginationtwbs').twbsPagination({
+            totalPages: {{ total_p }},
+            visiblePages: 5,
+            href: true,
+            pageVariable: "page",
+            initiateStartPageClick: false,
+            onPageClick: function (event, page) {
+              location.replace(location.href.replace(/page=.*/, "page=" + page))
+            }
+        });
+      </script>
     {% else %}
       <h5>We found nothing. Please change the query and try again!</h5>
     {% endif %}

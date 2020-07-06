@@ -154,4 +154,4 @@ def search():
             print_exc(sys.exc_info()[0])
             return render_template("error.html", error_message="Failed to search")
     else:
-        return render_template("error.html", error_massage="You have to sign in first")
+        return render_template("error.html", error_message="You have to sign in first")
