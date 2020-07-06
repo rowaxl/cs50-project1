@@ -47,6 +47,8 @@
 #search-card {
   color: #000;
   width: 90vw;
+  height: 85vh;
+  overflow: scroll;
   background: rgba(255, 255, 255, 0.7);
   margin: auto;
   margin: 20px;

@@ -21,7 +21,7 @@ The Bookcritics
     </div>
   </div>
 
-  <form action="{{ url_for("search", category=request.form.get("category"), query=request.form.get("query")) }}" method="GET">
+  <form action="{{ url_for("search", category=request.form.get("category"), query=request.form.get("query"), page=1 ) }}" method="GET">
     <div class="form-row align-items-center" style="align-items: center;">
       <div class="col-auto">
         <label for="search-isbn">Search The Book by</label>
@@ -47,10 +47,53 @@ The Bookcritics
   </form>
 
   {% if found %}
-    <h4>{{ count }} books found!</h4>
-    {% for book in books %}
-    <p>{{ book.title }}</p>
-    {% endfor %}
+    <h4>Searching by <span style="font-weight:900; text-transform:uppercase;">{{ category }}</span> includes <span style="font-weight:900">{{ query }}</span>: {{ count }} books found!</h4>
+
+    {% if count > 0 %}
+      <ul class="list-group">
+      {% for book in books %}
+        <li class="list-group-item list-group-item-action">
+          <h5 class="card-title">{{ book.title }} ({{ book.year }})</h5>
+          <p class="card-text">Author: {{ book.author }}</p>
+          <p class="card-text">ISBN: {{ book.isbn }}</p>
+        </li>
+      {% endfor %}
+      </ul>
+
+      <nav aria-label="navigation" style="margin-top: 10px;">
+        <ul class="pagination justify-content-center">
+          {% if current_p > 1 %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for("search", category=category, query=query, page=current_p - 1) }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {% endif %}
+
+          {% for i in range(1, total_p + 1) %}
+            {% if i == current_p %}
+              <li class="page-item active">
+                <a class="page-link" href="{{ url_for("search", category=category, query=query, page=i) }}">{{ i }}</a>
+              </li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="{{ url_for("search", category=category, query=query, page=i) }}">{{ i }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if current_p < total_p %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for("search", category=category, query=query, page=current_p + 1) }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% else %}
+      <h5>We found nothing. Please change the query and try again!</h5>
+    {% endif %}
   {% endif %}
 </div>
 {% endblock body %}

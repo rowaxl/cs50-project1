@@ -1,7 +1,8 @@
 import os
 import uuid
 import sys
-
+from traceback import print_exc
+import math
 from flask import Flask, session, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -37,6 +38,8 @@ search_options = [
     {'label': "Year", 'value': "year"},
     {'label': "ISBN", 'value': "isbn"}]
 
+post_per_page = 5
+
 def navigate(destination):
     print(destination)
 
@@ -68,8 +71,7 @@ def signup():
             print('Success to create user')
         except:
             db.rollback()
-            e = sys.exc_info()[0]
-            print(f"error: {e}")
+            print_exc(sys.exc_info()[0])
             return render_template("error.html", error_message="Failed to signup user")
 
         return render_template("success.html", success_message="Success to signup!")
@@ -86,8 +88,7 @@ def signin():
         user = db.query(User).filter_by(username=user_name, password=str(hashed)).first()
         session['username'] = user_name
     except:
-        e = sys.exc_info()[0]
-        print(f"error: {e}")
+        print_exc(sys.exc_info()[0])
         return render_template("error.html", error_message="Failed to signin")
 
     return render_template(
@@ -108,32 +109,49 @@ def search():
         try:
             category = request.args.get('category')
             query = request.args.get('query')
+            page = request.args.get('page')
+            if page == None:
+                page = 1
+            else:
+                page = int(page)
 
-            if not category or not query:
+            if not category or not query or not page:
                 return render_template("search.html",
                     username=session['username'],
-                    search_options=search_options)
+                    search_options=search_options,
+                    found=False)
 
             db = db_session()
             if category == "title":
-                books = db.query(Book).filter(Book.title.like(f"%{query}%")).all()
+                q = db.query(Book).filter(Book.title.ilike(f"%{query}%"))
             elif category == "isbn":
-                books = db.query(Book).filter(Book.isbn.like(f"%{query}%")).all()
+                q = db.query(Book).filter(Book.isbn.ilike(f"%{query}%"))
             elif category == "author":
-                books = db.query(Book).filter(Book.author.like(f"%{query}%")).all()
+                q = db.query(Book).filter(Book.author.ilike(f"%{query}%"))
             elif category == "year":
-                books = db.query(Book).filter(Book.year == query).all()
+                q = db.query(Book).filter(Book.year == query)
+            else:
+                raise render_template("error.html", error_massage="Unhandled error occured in querying")
+
+            total = q.count()
+            offset = (page - 1) * post_per_page
+            limit = post_per_page
+
+            books = q.limit(limit).offset(offset).all()
 
             return render_template("search.html",
                     username=session['username'],
                     search_options=search_options,
                     found=True,
-                    count=len(books),
-                    books=books
+                    category=category,
+                    query=query,
+                    count=total,
+                    books=books,
+                    current_p=page,
+                    total_p=math.ceil(total / post_per_page)
                 )
         except:
-            e = sys.exc_info()[0]
-            print(f"error: {e}")
+            print_exc(sys.exc_info()[0])
             return render_template("error.html", error_message="Failed to search")
     else:
         return render_template("error.html", error_massage="You have to sign in first")
