@@ -60,3 +60,14 @@
   overflow: scroll;
   margin: auto;
 }
+
+.review-list {
+  width: 100%;
+}
+
+#review-list-wrap {
+  max-height: 55vh;
+  overflow: scroll;
+  margin: 10px;
+  box-shadow: 5px 5px 5px #359;
+}

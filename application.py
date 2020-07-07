@@ -8,7 +8,9 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import requests
-from models import User, Book
+from datetime import datetime
+
+from models import *
 
 app = Flask(__name__)
 
@@ -163,9 +165,11 @@ def book_detail(isbn):
             db = db_session()
             book_detail = db.query(Book).filter_by(isbn=isbn).first()
 
-            # TODO: Get book reviews
+            reviews = db.query(Review).filter(Review.book_isbn == book_detail.isbn).all()
+            for review in reviews:
+                review.formattedDate = datetime.utcfromtimestamp(review.datetime / 1000).strftime("%Y-%m-%d %H:%M:%s")
 
-            return render_template("book.html", book_detail=book_detail)
+            return render_template("book.html", book_detail=book_detail, reviews=reviews, count=len(reviews))
         except:
             print_exc(sys.exc_info()[0])
             return render_template("error.html", error_message="Failed to show book details")

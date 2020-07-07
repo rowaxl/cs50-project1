@@ -20,3 +20,12 @@ class Book(db.Model):
 
   def __repr__(self):
     return '<Book %r>' % self.isbn
+
+class Review(db.Model):
+  __tablename__ = "reviews"
+  id = db.Column(db.Integer, primary_key=True)
+  book_isbn = db.Column(db.String, nullable=False)
+  description = db.Column(db.String, nullable=False)
+  user_name = db.Column(db.String, nullable=False)
+  stars = db.Column(db.Integer, nullable=False)
+  datetime = db.Column(db.Integer, nullable=False)

@@ -18,10 +18,28 @@ The Bookcritics
   </div>
 
   <div class="card-body">
-    <a href="{{ url_for("search") }}">
-      <button type="button" class="btn btn-secondary mb-2">Return</button>
-    </a>
-    Spaces for reviews
+    <div class="row justify-content-end">
+      <a href="{{ url_for("search") }}">
+        <button type="button" class="btn btn-secondary mb-2">Return</button>
+      </a>
+    </div>
+    
+    <h5 class="card-title">Reviews</h5>
+    <div id="review-list-wrap" class="row">
+      {% if count > 0 %}
+      <ul class="list-group review-list">
+        {% for review in reviews %}
+          <li class="list-group-item list-group-item-action">
+            <h5 class="card-title">{{ review.user_name }} ({{ "★" * review.stars }})</h5>
+            <p class="card-text">{{ review.description }}</p>
+            <p class="card-text">Written at: {{ review.formattedDate }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <h5 class="card-title">There's no review yet!</h5>
+      {% endif %}
+    </div>
   </div>
 
   <div class="card-footer text-muted">
